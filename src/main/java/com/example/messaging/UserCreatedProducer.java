@@ -1,6 +1,6 @@
 package com.example.messaging;
 
-import com.example.domain.User;
+import com.example.models.User;
 import jakarta.annotation.Resource;
 import jakarta.ejb.Stateless;
 import jakarta.jms.*;
