@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class User {
 
     @Id @GeneratedValue
-    private Long id;
+    private Integer id;
 
     private String lastname;
     private String firstname;
@@ -27,7 +27,7 @@ public class User {
         this.password = password;
     }
 
-    public Long getId() { return id; }
+    public Integer getId() { return id; }
     public String getFirstName() { return lastname; }
     public String getLastName() { return firstname; }
     public String getEmail() { return email; }
@@ -38,7 +38,7 @@ public class User {
     public Double getEcartType(){
         //TODO
         return null; }
-    public void setId(Long id) { this.id = id; }
+    public void setId(Integer id) { this.id = id; }
     public void setLastName(String lastname) { this.lastname = lastname; }
     public void setFirstName(String firstname) { this.firstname = firstname; }
     public void setEmail(String email) { this.email = email; }

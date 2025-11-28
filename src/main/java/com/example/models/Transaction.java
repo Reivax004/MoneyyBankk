@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class Transaction {
 
     @Id @GeneratedValue
-    private Long id;    
+    private Integer id;    
 
     private Double price;
     private Date date;
@@ -25,13 +25,13 @@ public class Transaction {
         this.type = type;
     }
 
-    public Long getId() { return this.id; }
+    public Integer getId() { return this.id; }
     public Double getPrice() { return this.price; }
     public Date getDate() { return this.date; }
     public String getCurrency() { return this.currency; }
     public String getType() { return this.type; }
     
-    public void setId(Long id) { this.id = id; }
+    public void setId(Integer id) { this.id = id; }
     public void setPrice(Double price) { this.price = price; }
     public void setDate(Date date) { this.date = date; }
     public void setCurrency(String currency) { this.currency = currency;}
