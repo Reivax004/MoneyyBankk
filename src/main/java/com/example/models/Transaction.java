@@ -16,6 +16,10 @@ public class Transaction {
     private String  currency;
     private String type;
 
+    @ManyToOne
+    private User user;
+
+
     public Transaction() {}
 
     public Transaction(Double price, Date date, String currency, String type) {
@@ -30,10 +34,13 @@ public class Transaction {
     public Date getDate() { return this.date; }
     public String getCurrency() { return this.currency; }
     public String getType() { return this.type; }
-    
+    public User getUser() { return user; }
+
     public void setId(Integer id) { this.id = id; }
     public void setPrice(Double price) { this.price = price; }
     public void setDate(Date date) { this.date = date; }
     public void setCurrency(String currency) { this.currency = currency;}
     public void setType(String type) { this.type = type;}
+    public void setUser(User user) { this.user = user; }
+
 }
