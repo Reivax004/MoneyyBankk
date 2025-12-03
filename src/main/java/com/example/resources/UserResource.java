@@ -1,6 +1,8 @@
 package com.example.resources;
 
 import com.example.models.User;
+import com.example.service.UserService;
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -16,6 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
+    @Inject
+    private UserService userService;
     private static final Map<Integer, User> DB = new ConcurrentHashMap<>();
     private static final AtomicInteger SEQ = new AtomicInteger(0);
     static {
@@ -44,8 +48,14 @@ public class UserResource {
 
     @DELETE @Path("/{id}")
     public Response delete(@PathParam("id") int id) {
-        User removed = DB.remove(id);
+        User removed = userService.deleteUser(id);
         if (removed == null) throw new NotFoundException("User %d introuvable".formatted(id));
         return Response.noContent().build();
+    }
+    @POST
+    @Path("/")
+    public Response subscribe(User user) {
+        User created = userService.createUser(user);
+        return Response.ok(created).build();
     }
 }
