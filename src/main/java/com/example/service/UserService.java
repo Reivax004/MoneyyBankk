@@ -1,6 +1,9 @@
 package com.example.service;
 
 import com.example.models.User;
+
+import java.sql.Date;
+
 import com.example.messaging.UserCreatedProducer;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
@@ -15,14 +18,13 @@ public class UserService {
 
     @Inject
     UserCreatedProducer producer;
-/* TODO
-    public User createUser(String name, String email) {
-        User u = new User(name, email);
+    public User createUser(String lastname,String firstname, String email, Date birthdate, String password) {
+        User u = new User(lastname,firstname, email, birthdate, password);
         em.persist(u);
         producer.sendUserCreatedEvent(u);
         return u;
     }
-*/
+
     public User findUser(Long id) {
         return em.find(User.class, id);
     }
