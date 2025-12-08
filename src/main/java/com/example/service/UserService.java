@@ -2,7 +2,7 @@ package com.example.service;
 
 import com.example.models.User;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import com.example.messaging.UserCreatedProducer;
 import jakarta.ejb.Stateless;
@@ -18,7 +18,7 @@ public class UserService {
 
     @Inject
     UserCreatedProducer producer;
-    public User createUser(String lastname,String firstname, String email, Date birthdate, String password) {
+    public User createUser(String lastname,String firstname, String email, LocalDate birthdate, String password) {
         User u = new User(lastname,firstname, email, birthdate, password);
         em.persist(u);
         producer.sendUserCreatedEvent(u);
