@@ -1,18 +1,17 @@
 package com.example.service;
-
 import com.example.models.User;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import java.util.List;
 
 @Stateless
 public class UserService {
 
-    private static final Map<Integer, User> DB = new ConcurrentHashMap<>();
     @PersistenceContext
     EntityManager em;
 
@@ -25,13 +24,28 @@ public class UserService {
         return em.find(User.class, id);
     }
     public User deleteUser(int id) {
-        return DB.remove(id);
+        User u = em.find(User.class, id);
+        em.remove(u);
+        return u;
     }
     public User updateUser(User user, int id) {
-        return em.put(user, id);
+        User u = em.find(User.class, id);
+        u.setEmail(user.getEmail()); ;
+        u.setFirstName(user.getFirstName());
+        u.setLastName(user.getLastName());
+        u.setBirthdate(user.getBirthdate());
+        return u;
     }
-    public User findAllUser() {
-        return em.find();
+    public List<User> findAllUser() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+        cq.select(root);
+        List<User> users = em.createQuery(cq).getResultList();
+        for (User user : users) {
+            System.out.println(user);
+        }
+        return users;
     }
 
 }
