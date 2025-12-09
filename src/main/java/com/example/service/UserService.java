@@ -27,11 +27,11 @@ public class UserService {
     public User deleteUser(int id) {
         return DB.remove(id);
     }
-    public User updateUser(User user, int id) {
+    /*public User updateUser(User user, int id) {
         return em.put(user, id);
     }
     public User findAllUser() {
         return em.find();
-    }
+    }*/
 
 }
