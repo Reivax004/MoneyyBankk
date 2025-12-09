@@ -33,7 +33,7 @@ public class UserService {
         u.setEmail(user.getEmail()); ;
         u.setFirstName(user.getFirstName());
         u.setLastName(user.getLastName());
-        u.setBirthdate(user.getBirthdate());
+        //u.setBirthdate(user.getBirthdate());
         return u;
     }
     public List<User> findAllUser() {
@@ -47,5 +47,4 @@ public class UserService {
         }
         return users;
     }
-
 }

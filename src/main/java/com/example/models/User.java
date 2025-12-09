@@ -14,7 +14,7 @@ public class User {
 
     private String lastname;
     private String firstname;
-    private LocalDate birthdate;
+    //private LocalDate birthdate;
     private String email;
     private String password;
 
@@ -24,7 +24,7 @@ public class User {
         this.lastname = lastname;
         this.firstname = firstname;
         this.email = email;
-        this.birthdate = birthdate;
+        //this.birthdate = birthdate;
         this.password = password;
     }
 
@@ -32,7 +32,7 @@ public class User {
     public String getFirstName() { return this.lastname; }
     public String getLastName() { return this.firstname; }
     public String getEmail() { return this.email; }
-    public LocalDate getBirthdate() { return this.birthdate; }
+    //public LocalDate getBirthdate() { return this.birthdate; }
     public Double getMoyenne(){
         //TODO
         return null; }
@@ -44,5 +44,5 @@ public class User {
     public void setFirstName(String firstname) { this.firstname = firstname; }
     public void setEmail(String email) { this.email = email; }
     public void setPassword(String password) { this.password = password;}
-    public void setBirthdate(LocalDate birthdate) { this.birthdate = birthdate; }
+    //public void setBirthdate(LocalDate birthdate) { this.birthdate = birthdate; }
 }
