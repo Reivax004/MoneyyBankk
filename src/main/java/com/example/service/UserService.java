@@ -16,11 +16,12 @@ public class UserService {
     EntityManager em;
 
     @Inject
-    public User createUser(User user) {
+   public User createUser(User user) {
         em.persist(user);
         return user;
     }
     public User findUser(int id) {
+
         return em.find(User.class, id);
     }
     public User deleteUser(int id) {

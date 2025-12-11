@@ -15,3 +15,4 @@ public class ApplicationConfig extends ResourceConfig {
         property("jersey.config.beanValidation.enableOutputValidationErrorEntity.server", true);
     }
 }
+
