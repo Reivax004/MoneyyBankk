@@ -1,6 +1,7 @@
 package com.example.models;
 
 import java.sql.Date;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -16,6 +17,12 @@ public class User {
     private Date birthdate;
     private String email;
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ConnectionHistory> connectionHistories;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Transaction> transactions;
 
     public User() {}
 
