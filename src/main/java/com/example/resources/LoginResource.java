@@ -14,26 +14,25 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class LoginResource {
-    
+
     @Inject
     private LoginService loginService;
 
     @POST
-@Path("/login")
-public Response login(User user) {
+    @Path("/login")
+    public Response login(User user) {
 
-    if (user == null || user.getEmail() == null || user.getPassword() == null) {
-         throw new BadRequestException("Email and password are required");
+        if (user == null || user.getEmail() == null || user.getPassword() == null) {
+            throw new BadRequestException("Email and password are required");
+        }
+
+        String token = loginService.login(user.getEmail(), user.getPassword());
+
+        if (token == null) {
+            throw new NotAuthorizedException("Invalid credentials");
+        }
+
+        return Response.ok(token).build();
     }
-
-    String token = loginService.login(user.getEmail(), user.getPassword());
-
-    if (token == null) {
-        throw new NotAuthorizedException("Invalid credentials");
-    }
-
-    return Response.ok(token).build();
-}
-
 
 }

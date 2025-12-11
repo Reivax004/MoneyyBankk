@@ -51,8 +51,8 @@ public class UserService {
         }
         return users;
     }
-    public User getUserByEmail(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUserByEmail'");
+    public User getUserByEmail(String email) {
+        User u = em.find(User.class, email);
+        return u;
     }
 }

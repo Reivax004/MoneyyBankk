@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TransactionResource {
     @Inject
     private TransactionService transactionService;
+    
     private static final Map<Integer, Transaction> DB = new ConcurrentHashMap<>();
     private static final AtomicInteger SEQ = new AtomicInteger(0);
     static {
