@@ -2,8 +2,6 @@ package com.example.resources;
 
 import com.example.service.UserService;
 
-import java.util.Map;
-
 import com.example.models.User;
 import com.example.service.LoginService;
 
@@ -19,9 +17,6 @@ public class LoginResource {
     
     @Inject
     private LoginService loginService;
-
-    @Inject
-    private UserService userService;
 
     @POST
 @Path("/login")
