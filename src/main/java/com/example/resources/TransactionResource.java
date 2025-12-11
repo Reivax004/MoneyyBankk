@@ -22,17 +22,11 @@ public class TransactionResource {
     @Inject
     private TransactionService transactionService;
     
-    private static final Map<Integer, Transaction> DB = new ConcurrentHashMap<>();
-    private static final AtomicInteger SEQ = new AtomicInteger(0);
-    static {
-        DB.put(SEQ.incrementAndGet(), new Transaction(50.00, LocalDate.of(2025, 12, 06),"euro","depense"));
-        DB.put(SEQ.incrementAndGet(), new Transaction());
-    }
     @GET
     @Path("/")
     public Response list(int idUser) {
         List<Transaction> transactionList = transactionService.findAllTransactionOfUser(idUser);
-        if( transactionList == null) throw new NotFoundException("Aucune transaction trouvée pour l'utilisateur %d".formatted(idUser));
+        if( transactionList == null) throw new NotFoundException("No transaction for user with the emai:  %d".formatted(idUser));
         return Response.ok(transactionList).build();
     }
 
@@ -40,7 +34,7 @@ public class TransactionResource {
     @Path("/{id}")
     public Response get(@PathParam("id") int id) {
         Transaction u = transactionService.findTransaction(id);
-        if (u == null) throw new NotFoundException("Transaction %d introuvable".formatted(id));
+        if (u == null) throw new NotFoundException("Transaction %d not found".formatted(id));
         return Response.ok(u).build();
     }
 
@@ -48,7 +42,7 @@ public class TransactionResource {
     @Path("/{id}")
     public Response update(@PathParam("id") int id, @Valid Transaction in) {
         Transaction u = transactionService.updateTransaction(in, id);
-        if( u == null) throw new NotFoundException("Transaction %d introuvable".formatted(id));
+        if( u == null) throw new NotFoundException("Transaction %d not found".formatted(id));
         return Response.ok(u).build();
     }
 
@@ -56,7 +50,7 @@ public class TransactionResource {
     @Path("/{id}")
     public Response delete(@PathParam("id") int id) {
         Transaction removed = transactionService.deleteTransaction(id);
-        if (removed == null) throw new NotFoundException("Transaction %d introuvable".formatted(id));
+        if (removed == null) throw new NotFoundException("Transaction %d not found".formatted(id));
         return Response.noContent().build();
     }
 
