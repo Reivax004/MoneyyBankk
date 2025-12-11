@@ -7,11 +7,12 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 public class ApplicationConfig extends ResourceConfig {
     public ApplicationConfig() {
         packages("com.example.resources",
-                 "com.example.filters",
-                 "com.example.interceptors",
-                 "com.example.errors");
+                "com.example.filters",
+                "com.example.interceptors",
+                "com.example.errors");
         register(JacksonFeature.class);
         register(OpenApiResource.class);
         property("jersey.config.beanValidation.enableOutputValidationErrorEntity.server", true);
     }
 }
+

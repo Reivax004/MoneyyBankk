@@ -1,8 +1,7 @@
 package com.example.models;
 
 import java.sql.Date;
-import java.util.List;
-
+import java.time.LocalDate;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,7 +13,7 @@ public class User {
 
     private String lastname;
     private String firstname;
-    private Date birthdate;
+    //private LocalDate birthdate;
     private String email;
     private String password;
 
@@ -26,19 +25,19 @@ public class User {
 
     public User() {}
 
-    public User(String lastname,String firstname, String email, Date birthdate, String password) {
+    public User(String lastname,String firstname, String email, LocalDate birthdate, String password) {
         this.lastname = lastname;
         this.firstname = firstname;
         this.email = email;
-        this.birthdate = birthdate;
+        //this.birthdate = birthdate;
         this.password = password;
     }
 
-    public Integer getId() { return id; }
-    public String getFirstName() { return lastname; }
-    public String getLastName() { return firstname; }
-    public String getEmail() { return email; }
-    public Date getBirthdate() { return birthdate; }
+    public Integer getId() { return this.id; }
+    public String getFirstName() { return this.lastname; }
+    public String getLastName() { return this.firstname; }
+    public String getEmail() { return this.email; }
+    //public LocalDate getBirthdate() { return this.birthdate; }
     public Double getMoyenne(){
         //TODO
         return null; }
@@ -50,4 +49,5 @@ public class User {
     public void setFirstName(String firstname) { this.firstname = firstname; }
     public void setEmail(String email) { this.email = email; }
     public void setPassword(String password) { this.password = password;}
+    //public void setBirthdate(LocalDate birthdate) { this.birthdate = birthdate; }
 }

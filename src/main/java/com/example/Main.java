@@ -1,9 +1,7 @@
 package com.example;
 
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-
 import com.example.config.ApplicationConfig;
-
 import java.net.URI;
 
 public class Main {
