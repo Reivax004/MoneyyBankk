@@ -1,31 +1,38 @@
 package com.example.service;
 
 import com.example.models.User;
-
-import java.sql.Date;
-
-import com.example.messaging.UserCreatedProducer;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Stateless
 public class UserService {
 
+    private static final Map<Integer, User> DB = new ConcurrentHashMap<>();
     @PersistenceContext
     EntityManager em;
 
     @Inject
-    UserCreatedProducer producer;
-    public User createUser(String lastname,String firstname, String email, Date birthdate, String password) {
-        User u = new User(lastname,firstname, email, birthdate, password);
-        em.persist(u);
-        producer.sendUserCreatedEvent(u);
-        return u;
+   public User createUser(User user) {
+        em.persist(user);
+        return user;
     }
+    public User findUser(int id) {
 
-    public User findUser(Long id) {
         return em.find(User.class, id);
     }
+    public User deleteUser(int id) {
+        return DB.remove(id);
+    }
+    /*public User updateUser(User user, int id) {
+        return em.put(user, id);
+    }
+    public User findAllUser() {
+        return em.find();
+    }*/
+
 }
