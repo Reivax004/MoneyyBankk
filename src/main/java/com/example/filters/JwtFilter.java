@@ -27,6 +27,11 @@ public class JwtFilter implements ContainerRequestFilter {
     
     @Override
     public void filter(ContainerRequestContext ctx) throws IOException {
+
+        String path = ctx.getUriInfo().getPath();
+        if (path.startsWith("auth/login") || path.startsWith("users/register")) {
+            return; // Skip authentication for login endpoint
+        }
         String authHeader = ctx.getHeaderString("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
