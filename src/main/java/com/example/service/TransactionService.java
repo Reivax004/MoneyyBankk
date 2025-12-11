@@ -1,6 +1,8 @@
 package com.example.service;
 
 import com.example.models.Transaction;
+import com.example.models.User;
+
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -18,7 +20,7 @@ public class TransactionService {
     EntityManager em;
 
     @Inject
-    public Transaction createTransaction(Transaction transaction) {
+    public Transaction createTransaction(Transaction transaction, User user) {
         em.persist(transaction);
         return transaction;
     }
@@ -38,11 +40,11 @@ public class TransactionService {
         t.setType(transaction.getType());
         return t;
     }
-    public List<Transaction> findAllTransactionOfUser(int idUser) {
+    public List<Transaction> findAllTransactionOfUser(String email) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Transaction> cq = cb.createQuery(Transaction.class);
 		Root<Transaction> root = cq.from(Transaction.class);
-		cq.select(root).where(cb.equal(root.get("user").get("id"), idUser));
+		cq.select(root).where(cb.equal(root.get("user").get("email"), email));
 		List<Transaction> transactions = em.createQuery(cq).getResultList();
 		for (Transaction transaction : transactions) {
 			System.out.println(transaction);

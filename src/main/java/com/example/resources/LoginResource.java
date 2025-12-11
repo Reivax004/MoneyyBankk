@@ -1,7 +1,5 @@
 package com.example.resources;
 
-import com.example.service.UserService;
-
 import com.example.models.User;
 import com.example.service.LoginService;
 
