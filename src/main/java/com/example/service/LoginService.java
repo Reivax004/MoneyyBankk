@@ -18,6 +18,9 @@ public class LoginService {
     private static final String SECRET = "key-code-moneey-bankk-2025-very-secure-key!!";
     private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
+    public LoginService() {
+    }
+
     public String login(String email, String password) {
         User user = userService.getUserByEmail(email);
         if (user == null) {
@@ -35,8 +38,8 @@ public class LoginService {
         return Jwts.builder()
                 .subject(user.getEmail())
                 .claim("id", user.getId())
-                .claim("lastname", user.getLastName())
-                .claim("firstname", user.getFirstName())
+                .claim("lastname", user.getLastname())
+                .claim("firstname", user.getFirstname())
                 .claim("birthdate", user.getBirthdate())
                 .issuedAt(now)
                 .expiration(exp)

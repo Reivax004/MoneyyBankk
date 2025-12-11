@@ -12,7 +12,7 @@ public class ApplicationConfig extends ResourceConfig {
                 "com.example.errors");
         register(JacksonFeature.class);
         register(OpenApiResource.class);
+        register(new AppBinder());
         property("jersey.config.beanValidation.enableOutputValidationErrorEntity.server", true);
     }
 }
-

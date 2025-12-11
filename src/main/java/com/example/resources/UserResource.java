@@ -9,20 +9,17 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
+    
     @Inject
     private UserService userService;
   
     @GET
-    @Path("/")
+    @Path("/all")
     public Response list() {
         List<User> userList = userService.findAllUser();
         return Response.ok(userList).build();

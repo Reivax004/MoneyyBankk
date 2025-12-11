@@ -34,14 +34,14 @@ public class Transaction {
 
     public Integer getId() { return this.id; }
     public Double getPrice() { return this.price; }
-    public LocalDate getLocalDate() { return this.date; }
+    public LocalDate getDate() { return this.date; }
     public String getCurrency() { return this.currency; }
     public String getType() { return this.type; }
     public User getUser() { return user; }
 
     public void setId(Integer id) { this.id = id; }
     public void setPrice(Double price) { this.price = price; }
-    public void setLocalDate(LocalDate date) { this.date = date; }
+    public void setDate(LocalDate date) { this.date = date; }
     public void setCurrency(String currency) { this.currency = currency;}
     public void setType(String type) { this.type = type;}
     public void setUser(User user) { this.user = user; }

@@ -8,12 +8,8 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.util.List;
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 @Path("/transactions")
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,7 +19,7 @@ public class TransactionResource {
     private TransactionService transactionService;
     
     @GET
-    @Path("/")
+    @Path("/all")
     public Response list(int idUser) {
         List<Transaction> transactionList = transactionService.findAllTransactionOfUser(idUser);
         if( transactionList == null) throw new NotFoundException("No transaction for user with the emai:  %d".formatted(idUser));
@@ -55,7 +51,7 @@ public class TransactionResource {
     }
 
     @POST
-    @Path("/")
+    @Path("/new")
     public Response subscribe(Transaction transaction) {
         Transaction created = transactionService.createTransaction(transaction);
         return Response.ok(created).build();
