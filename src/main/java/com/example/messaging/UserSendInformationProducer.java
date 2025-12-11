@@ -1,8 +1,8 @@
 package com.example.messaging;
-import com.example.models.User;
 import jakarta.annotation.Resource;
 import jakarta.ejb.Stateless;
 import jakarta.jms.*;
+import com.example.service.*;
 
 @Stateless
 public class UserSendInformationProducer {
@@ -10,14 +10,14 @@ public class UserSendInformationProducer {
     @Resource(lookup = "jms/__defaultConnectionFactory")
     private ConnectionFactory factory;
 
-    @Resource(lookup = "jms/UserCreatedQueue")
+    @Resource(lookup = "jms/UserSendInfomrationQueue")
     private Queue queue;
 
-    public void sendUserCreatedEvent(User user) {
+    public void sendUserInformation(String jsonInformation) {
         try (JMSContext ctx = factory.createContext()) {
-            String payload = "Informations statistiques:" + user.getJsonInformation();
+            String payload = "Informations statistiques:" + jsonInformation;
             ctx.createProducer().send(queue, payload);
-            System.out.println("📤 Sent JMS message: " + payload);
+            System.out.println("📤 Message envoyé au conseiller ! Voici le contenu: " + payload);
         }
     }
 

@@ -3,6 +3,8 @@ package com.example.models;
 import java.sql.Date;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 @Table(name = "connection_histories")
@@ -11,7 +13,9 @@ public class ConnectionHistory {
     @Id @GeneratedValue
     private Integer id;    
 
+    @PastOrPresent
     private Date connection_date;
+
     private String  status;
 
     @ManyToOne

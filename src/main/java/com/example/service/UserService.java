@@ -1,5 +1,6 @@
 package com.example.service;
 import com.example.models.User;
+
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -16,6 +17,8 @@ public class UserService {
     EntityManager em;
 
     @Inject
+    UserCreatedProducer producer;
+  
    public User createUser(User user) {
         em.persist(user);
         return user;

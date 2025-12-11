@@ -2,6 +2,7 @@ package com.example.models;
 
 import java.time.LocalDate;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 @Table(name = "transactions")
@@ -11,8 +12,12 @@ public class Transaction {
     private Integer id;
 
     private Double price;
+
+    @PastOrPresent
     private LocalDate date;
-    private String  currency;
+
+  private String  currency;
+
     private String type;
 
     @ManyToOne
