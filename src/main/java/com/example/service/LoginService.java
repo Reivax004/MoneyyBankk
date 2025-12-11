@@ -18,10 +18,10 @@ public class LoginService {
     private static final String SECRET = "key-code-moneey-bankk-2025-very-secure-key!!";
     private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    public String login(String username, String password) {
-        User user = userService.getUserByEmail(username);
+    public String login(String email, String password) {
+        User user = userService.getUserByEmail(email);
         if (user == null) {
-            throw new NotFoundException("User not found");
+            throw new NotFoundException("Email not found");
         }
 
         if (!BCrypt.checkpw(password, user.getPassword())) {
@@ -30,7 +30,7 @@ public class LoginService {
 
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
-        Date exp = new Date(nowMillis + 1800000);
+        Date exp = new Date(nowMillis + 1800000); // 1800000 ms = 30 minutes
 
         return Jwts.builder()
                 .subject(user.getEmail())
