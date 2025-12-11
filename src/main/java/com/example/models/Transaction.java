@@ -1,7 +1,6 @@
 package com.example.models;
 
-import java.sql.Date;
-
+import java.time.LocalDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 
@@ -10,25 +9,23 @@ import jakarta.validation.constraints.PastOrPresent;
 public class Transaction {
 
     @Id @GeneratedValue
-    private Integer id;    
+    private Integer id;
 
     private Double price;
 
     @PastOrPresent
-    private Date date;
-    
-    
-    private String  currency;
+    private LocalDate date;
+
+  private String  currency;
 
     private String type;
 
     @ManyToOne
     private User user;
 
-
     public Transaction() {}
 
-    public Transaction(Double price, Date date, String currency, String type) {
+    public Transaction(Double price, LocalDate date, String currency, String type) {
         this.price = price;
         this.date = date;
         this.currency = currency;
@@ -37,14 +34,14 @@ public class Transaction {
 
     public Integer getId() { return this.id; }
     public Double getPrice() { return this.price; }
-    public Date getDate() { return this.date; }
+    public LocalDate getLocalDate() { return this.date; }
     public String getCurrency() { return this.currency; }
     public String getType() { return this.type; }
     public User getUser() { return user; }
 
     public void setId(Integer id) { this.id = id; }
     public void setPrice(Double price) { this.price = price; }
-    public void setDate(Date date) { this.date = date; }
+    public void setLocalDate(LocalDate date) { this.date = date; }
     public void setCurrency(String currency) { this.currency = currency;}
     public void setType(String type) { this.type = type;}
     public void setUser(User user) { this.user = user; }

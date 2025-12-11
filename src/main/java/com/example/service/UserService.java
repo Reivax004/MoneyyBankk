@@ -1,14 +1,14 @@
 package com.example.service;
-
 import com.example.models.User;
 
-import java.time.LocalDate;
-
-import com.example.messaging.UserCreatedProducer;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import java.util.List;
 
 @Stateless
 public class UserService {
@@ -18,14 +18,37 @@ public class UserService {
 
     @Inject
     UserCreatedProducer producer;
-    public User createUser(String lastname,String firstname, String email, LocalDate birthdate, String password) {
-        User u = new User(lastname,firstname, email, birthdate, password);
-        em.persist(u);
-        producer.sendUserCreatedEvent(u);
+  
+   public User createUser(User user) {
+        em.persist(user);
+        return user;
+    }
+    public User findUser(int id) {
+
+        return em.find(User.class, id);
+    }
+    public User deleteUser(int id) {
+        User u = em.find(User.class, id);
+        em.remove(u);
         return u;
     }
-
-    public User findUser(Long id) {
-        return em.find(User.class, id);
+    public User updateUser(User user, int id) {
+        User u = em.find(User.class, id);
+        u.setEmail(user.getEmail()); ;
+        u.setFirstName(user.getFirstName());
+        u.setLastName(user.getLastName());
+        //u.setBirthdate(user.getBirthdate());
+        return u;
+    }
+    public List<User> findAllUser() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+        cq.select(root);
+        List<User> users = em.createQuery(cq).getResultList();
+        for (User user : users) {
+            System.out.println(user);
+        }
+        return users;
     }
 }
