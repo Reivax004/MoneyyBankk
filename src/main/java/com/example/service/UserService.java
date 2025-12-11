@@ -2,7 +2,6 @@ package com.example.service;
 import com.example.models.User;
 
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -10,16 +9,17 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 @Stateless
 public class UserService {
 
     @PersistenceContext
     EntityManager em;
-
-    @Inject
-    UserCreatedProducer producer;
   
    public User createUser(User user) {
+        String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        user.setPassword(hash);
         em.persist(user);
         return user;
     }
@@ -50,5 +50,9 @@ public class UserService {
             System.out.println(user);
         }
         return users;
+    }
+    public User getUserByEmail(String username) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getUserByEmail'");
     }
 }

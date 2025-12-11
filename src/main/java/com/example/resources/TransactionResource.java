@@ -9,7 +9,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.Collection;
 import java.util.List;
 import java.time.LocalDate;
 import java.util.Map;
@@ -20,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class TransactionResource {
-@Inject
+    @Inject
     private TransactionService transactionService;
     private static final Map<Integer, Transaction> DB = new ConcurrentHashMap<>();
     private static final AtomicInteger SEQ = new AtomicInteger(0);
@@ -32,6 +31,7 @@ public class TransactionResource {
     @Path("/")
     public Response list(int idUser) {
         List<Transaction> transactionList = transactionService.findAllTransactionOfUser(idUser);
+        if( transactionList == null) throw new NotFoundException("Aucune transaction trouvée pour l'utilisateur %d".formatted(idUser));
         return Response.ok(transactionList).build();
     }
 
@@ -46,9 +46,8 @@ public class TransactionResource {
     @PUT
     @Path("/{id}")
     public Response update(@PathParam("id") int id, @Valid Transaction in) {
-        if (!DB.containsKey(id)) throw new NotFoundException("Transaction %d introuvable".formatted(id));
-        in.setId(id);
         Transaction u = transactionService.updateTransaction(in, id);
+        if( u == null) throw new NotFoundException("Transaction %d introuvable".formatted(id));
         return Response.ok(u).build();
     }
 

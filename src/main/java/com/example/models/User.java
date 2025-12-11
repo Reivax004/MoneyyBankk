@@ -51,6 +51,8 @@ public class User {
     public String getLastName() { return this.lastname; }
     public String getEmail() { return this.email; }
     public LocalDate getBirthdate() { return this.birthdate; }
+    public String getPassword() { return this.password; }
+    //public LocalDate getBirthdate() { return this.birthdate; }
   
     public void setId(Integer id) { this.id = id; }
     public void setLastName(String lastname) { this.lastname = lastname; }
