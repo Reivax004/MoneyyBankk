@@ -1,15 +1,19 @@
 package com.example.service;
 
 import com.example.config.Persistence;
+import com.example.models.Transaction;
 import com.example.models.User;
 
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -24,6 +28,7 @@ public class UserService {
         this.em = Persistence.getEntityManager();
     }
 
+    @Transactional
     public User createUser(User user) {
         String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hash);
@@ -65,7 +70,14 @@ public class UserService {
     }
 
     public User getUserByEmail(String email) {
-        User u = em.find(User.class, email);
-        return u;
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+
+        cq.select(root)
+                .where(cb.equal(root.get("email"), email));
+
+        return em.createQuery(cq).getSingleResult();
     }
+
 }
