@@ -16,7 +16,7 @@ public class Transaction {
     @PastOrPresent
     private LocalDate date;
 
-  private String  currency;
+    private String  currency;
 
     private String type;
 

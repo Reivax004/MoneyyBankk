@@ -2,7 +2,6 @@ package com.example.models;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.time.LocalDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,15 +15,16 @@ public class User {
     @Id @GeneratedValue
     private Integer id;
 
+    @Column(nullable = true)
     private String lastname;
 
+    @Column(nullable = true)
     private String firstname;
 
     @Past
     private LocalDate birthdate;
 
     @Column(nullable = false) @Email @NotBlank
-
     private String email;
 
     @Column(nullable = false) @NotBlank @Size(min = 8, message = "Password must be at least 8 characters long")
