@@ -40,7 +40,7 @@ public class LoginService {
                 .claim("id", user.getId())
                 .claim("lastname", user.getLastname())
                 .claim("firstname", user.getFirstname())
-                //.claim("birthdate", user.getBirthdate())
+                .claim("birthdate", user.getBirthdate())
                 .claim("birthdate", user.getBirthdate() != null ? user.getBirthdate().toString() : null)
                 .issuedAt(now)
                 .expiration(exp)
