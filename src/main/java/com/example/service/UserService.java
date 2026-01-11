@@ -35,6 +35,7 @@ public class UserService {
         String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hash);
         em.persist(user);
+        new com.example.messaging.UserCreatedProducer().sendUserCreatedEvent(user);
         tx.commit();
         em.close();
         return user;

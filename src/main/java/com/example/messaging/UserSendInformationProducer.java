@@ -10,7 +10,7 @@ public class UserSendInformationProducer {
     @Resource(lookup = "jms/__defaultConnectionFactory")
     private ConnectionFactory factory;
 
-    @Resource(lookup = "jms/UserSendInfomrationQueue")
+    @Resource(lookup = "jms/UserSendInformationQueue")
     private Queue queue;
 
     public void sendUserInformation(String jsonInformation) {
