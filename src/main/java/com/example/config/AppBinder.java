@@ -1,5 +1,6 @@
 package com.example.config;
 
+import com.example.service.StatisticsService;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 import com.example.service.UserService;
@@ -12,5 +13,6 @@ public class AppBinder extends AbstractBinder {
         bind(UserService.class).to(UserService.class);
         bind(LoginService.class).to(LoginService.class);
         bind(TransactionService.class).to(TransactionService.class);
+        bind(StatisticsService.class).to(StatisticsService.class);
     }
 }
