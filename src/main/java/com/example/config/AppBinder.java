@@ -1,11 +1,11 @@
 package com.example.config;
 
 import com.example.service.StatisticsService;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
-
 import com.example.service.UserService;
 import com.example.service.LoginService;
 import com.example.service.TransactionService;
+import com.example.service.LoanService;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 public class AppBinder extends AbstractBinder {
     @Override
@@ -14,5 +14,6 @@ public class AppBinder extends AbstractBinder {
         bind(LoginService.class).to(LoginService.class);
         bind(TransactionService.class).to(TransactionService.class);
         bind(StatisticsService.class).to(StatisticsService.class);
+        bind(LoanService.class).to(LoanService.class);
     }
 }
