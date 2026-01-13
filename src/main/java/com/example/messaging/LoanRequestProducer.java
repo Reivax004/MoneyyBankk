@@ -1,5 +1,6 @@
 package com.example.messaging;
 
+import com.example.exceptions.LoanMessagingFailureException;
 import com.example.models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.*;
@@ -58,7 +59,7 @@ public class LoanRequestProducer {
             return reply;
 
         } catch (Exception e) {
-            throw new RuntimeException("Loan JMS request/reply failed", e);
+            throw new LoanMessagingFailureException("Loan JMS request/reply failed" + e.getStackTrace());
         }
     }
 }
