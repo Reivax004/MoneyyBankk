@@ -26,37 +26,60 @@ public class StatisticsService {
             );
         }
 
-        List<Transaction> credits = transactions.stream()
-                .filter(t -> t.getType().equalsIgnoreCase("CREDIT")
-                        || t.getType().equalsIgnoreCase("INCOME"))
-                .collect(Collectors.toList());
+        List<Transaction> credits = getCredits(transactions);
+        List<Transaction> debits = getDebits(transactions);
 
-        List<Transaction> debits = transactions.stream()
-                .filter(t -> t.getType().equalsIgnoreCase("DEBIT")
-                        || t.getType().equalsIgnoreCase("EXPENSE"))
-                .collect(Collectors.toList());
+        double totalCredits = getTotalAmount(credits);
+        double totalDebits = getTotalAmount(debits);
 
-        double totalCredits = credits.stream()
-                .mapToDouble(Transaction::getPrice)
-                .sum();
+        double balance = calculateBalance(totalCredits, totalDebits);
 
-        double totalDebits = debits.stream()
-                .mapToDouble(Transaction::getPrice)
-                .sum();
-
-        double balance = totalCredits - totalDebits;
         return Map.of(
                 "userId", user.getId(),
                 "totalTransactions", transactions.size(),
                 "totalCredits", totalCredits,
                 "totalDebits", totalDebits,
                 "balance", balance,
-                "maxTransaction", transactions.stream()
-                        .mapToDouble(Transaction::getPrice)
-                        .max().orElse(0),
-                "minTransaction", transactions.stream()
-                        .mapToDouble(Transaction::getPrice)
-                        .min().orElse(0)
+                "maxTransaction", getMaxTransaction(transactions),
+                "minTransaction", getMinTransaction(transactions)
         );
+    }
+
+    private List<Transaction> getCredits(List<Transaction> transactions) {
+        return transactions.stream()
+                .filter(t -> t.getType().equalsIgnoreCase("CREDIT")
+                        || t.getType().equalsIgnoreCase("INCOME"))
+                .collect(Collectors.toList());
+    }
+
+    private List<Transaction> getDebits(List<Transaction> transactions) {
+        return transactions.stream()
+                .filter(t -> t.getType().equalsIgnoreCase("DEBIT")
+                        || t.getType().equalsIgnoreCase("EXPENSE"))
+                .collect(Collectors.toList());
+    }
+
+    private double getTotalAmount(List<Transaction> transactions) {
+        return transactions.stream()
+                .mapToDouble(Transaction::getPrice)
+                .sum();
+    }
+
+    private double calculateBalance(double totalCredits, double totalDebits) {
+        return totalCredits - totalDebits;
+    }
+
+    private double getMaxTransaction(List<Transaction> transactions) {
+        return transactions.stream()
+                .mapToDouble(Transaction::getPrice)
+                .max()
+                .orElse(0);
+    }
+
+    private double getMinTransaction(List<Transaction> transactions) {
+        return transactions.stream()
+                .mapToDouble(Transaction::getPrice)
+                .min()
+                .orElse(0);
     }
 }

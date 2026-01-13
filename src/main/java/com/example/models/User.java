@@ -24,7 +24,7 @@ public class User {
     @Past
     private LocalDate birthdate;
 
-    @Column(nullable = false) @Email @NotBlank
+    @Column(nullable = false, unique = true) @Email @NotBlank
     private String email;
 
     @Column(nullable = false) @NotBlank @Size(min = 8, message = "Password must be at least 8 characters long")
