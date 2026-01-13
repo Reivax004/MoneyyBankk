@@ -28,10 +28,12 @@ public class UserService {
         this.em = Persistence.getEntityManager();
     }
 
-    @Transactional
     public User createUser(User user) {
         var tx = em.getTransaction();
         tx.begin();
+        if (existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already in use");
+        }
         String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hash);
         em.persist(user);
@@ -93,5 +95,13 @@ public class UserService {
 
         return em.createQuery(cq).getSingleResult();
     }
+    public boolean existsByEmail(String email) {
+        Long count = em.createQuery(
+                        "SELECT COUNT(u) FROM User u WHERE u.email = :email", Long.class)
+                .setParameter("email", email)
+                .getSingleResult();
+        return count > 0;
+    }
+
 
 }
