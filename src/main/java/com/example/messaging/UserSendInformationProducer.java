@@ -2,7 +2,6 @@ package com.example.messaging;
 import jakarta.annotation.Resource;
 import jakarta.ejb.Stateless;
 import jakarta.jms.*;
-import com.example.service.*;
 
 @Stateless
 public class UserSendInformationProducer {
