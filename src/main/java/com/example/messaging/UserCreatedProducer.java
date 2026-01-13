@@ -1,5 +1,6 @@
 package com.example.messaging;
 
+import com.example.exceptions.UserCreateMessagingFailureException;
 import com.example.models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.ConnectionFactory;
@@ -32,7 +33,7 @@ public class UserCreatedProducer {
             ctx.createProducer().send(queue, json);
             System.out.println("📤 Sent USER_CREATED document: " + json);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to send USER_CREATED document message", e);
+            throw new UserCreateMessagingFailureException("Failed to send USER_CREATED document message" + e.getStackTrace());
         }
     }
 }
