@@ -1,14 +1,13 @@
 package com.example.resources;
 
-import com.example.service.UserService;
-
 import com.example.models.User;
 import com.example.service.LoginService;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import java.util.UUID;
 
 @Path("/auth")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -20,19 +19,22 @@ public class LoginResource {
 
     @POST
     @Path("/login")
-    public Response login(User user) {
-
+    public Response login(
+            User user,
+            @HeaderParam("X-Correlation-Id") String correlationIdHeader
+    ) {
         if (user == null || user.getEmail() == null || user.getPassword() == null) {
             throw new BadRequestException("Email and password are required");
         }
 
-        String token = loginService.login(user.getEmail(), user.getPassword());
+        String correlationId = (correlationIdHeader != null && !correlationIdHeader.isBlank())
+                ? correlationIdHeader
+                : UUID.randomUUID().toString();
 
-        if (token == null) {
-            throw new NotAuthorizedException("Invalid credentials");
-        }
+        String token = loginService.login(user.getEmail(), user.getPassword(), correlationId);
 
-        return Response.ok(token).build();
+        return Response.ok(token)
+                .header("X-Correlation-Id", correlationId)
+                .build();
     }
-
 }
