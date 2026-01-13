@@ -1,5 +1,6 @@
 package com.example.messaging;
 
+import com.example.exceptions.MessageSendException;
 import com.example.models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.ConnectionFactory;
@@ -30,9 +31,9 @@ public class UserCreatedProducer {
             String json = MAPPER.writeValueAsString(doc);
 
             ctx.createProducer().send(queue, json);
-            System.out.println("📤 Sent USER_CREATED document: " + json);
+            System.out.println("📤 Sent USER_CREATED document message: " + json);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to send USER_CREATED document message", e);
+            throw new MessageSendException("Failed to send USER_CREATED document message", e);
         }
     }
 }
