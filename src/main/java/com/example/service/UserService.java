@@ -51,6 +51,11 @@ public class UserService {
         var tx = em.getTransaction();
         tx.begin();
         User u = em.find(User.class, id);
+        if (u == null) {
+            tx.rollback();
+            em.close();
+            return null;
+        }
         em.remove(u);
         tx.commit();
         em.close();

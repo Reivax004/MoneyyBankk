@@ -1,14 +1,6 @@
 -- Suppression des anciennes données pour éviter les doublons
 DELETE FROM transactions;
-DELETE FROM users;
 
--- Insertion des 5 users avec id fixes
-INSERT INTO users (id, lastname, firstname, birthdate, email, password) VALUES
-                                                                            (1, 'Dupont', 'Jean', '1998-04-12', 'jean.dupont@example.com', 'password123'),
-                                                                            (2, 'Martin', 'Claire', '2000-09-30', 'claire.martin@example.com', 'securePass1'),
-                                                                            (3, 'Bernard', 'Lucas', '1995-01-18', 'lucas.bernard@example.com', 'myPassword9'),
-                                                                            (4, 'Petit', 'Emma', '2002-06-05', 'emma.petit@example.com', 'emmaPass88'),
-                                                                            (5, 'Moreau', 'Thomas', '1997-11-22', 'thomas.moreau@example.com', 'thomasPwd7');
 
 -- Insertion de 20 transactions avec id fixes
 INSERT INTO transactions (id, price, date, currency, type, user_id) VALUES

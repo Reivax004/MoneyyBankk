@@ -42,6 +42,11 @@ public class TransactionService {
         var tx = em.getTransaction();
         tx.begin();
         Transaction t = em.find(Transaction.class, id);
+        if (t == null) {
+            tx.rollback();
+            em.close();
+            return null;
+        }
         em.remove(t);
         tx.commit();
         em.close();
