@@ -1,19 +1,15 @@
 package com.example.service;
 
 import com.example.config.Persistence;
+import com.example.exceptions.EmailAlreadyUsedException;
 import com.example.models.ConnectionHistory;
-import com.example.models.Transaction;
 import com.example.models.User;
-
-import jakarta.ejb.Singleton;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,7 +30,7 @@ public class UserService {
         var tx = em.getTransaction();
         tx.begin();
         if (existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new EmailAlreadyUsedException("Email: '" + user.getEmail() + "' already in use");
         }
         String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hash);
@@ -98,13 +94,14 @@ public class UserService {
 
         return results.isEmpty() ? null : results.get(0);
     }
+
     public boolean existsByEmail(String email) {
-        Long count = em.createQuery(
-                        "SELECT COUNT(u) FROM User u WHERE u.email = :email", Long.class)
-                .setParameter("email", email)
-                .getSingleResult();
-        return count > 0;
+        if (getUserByEmail(email) != null) {
+            return true;
+        }
+        return false;
     }
+
     public void saveConnectionHistory(User user, String status, String correlationId) {
         ConnectionHistory history = new ConnectionHistory();
         history.setUser(user);
