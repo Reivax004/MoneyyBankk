@@ -2,6 +2,7 @@ package com.example.messaging;
 
 import com.example.exceptions.LoanMessagingFailureException;
 import com.example.models.User;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.*;
 
@@ -14,7 +15,7 @@ public class LoanRequestProducer {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public Map<String, Object> sendLoanRequestAndWaitDecision(User user, double amount, Map<String, Object> stats) {
+    public JsonNode sendLoanRequestAndWaitDecision(User user, double amount, Map<String, Object> stats) {
         ConnectionFactory factory = Jms.connectionFactory();
 
         try (JMSContext ctx = factory.createContext()) {
@@ -46,19 +47,15 @@ public class LoanRequestProducer {
 
             String replyJson = replyConsumer.receiveBody(String.class, 5000);
             if (replyJson == null) {
-                return Map.of(
-                        "requestId", requestId,
-                        "status", "TIMEOUT",
-                        "message", "No decision received within timeout"
-                );
+                return null;
             }
 
-            @SuppressWarnings("unchecked")
-            Map<String, Object> reply = MAPPER.readValue(replyJson, Map.class);
+            JsonNode reply = MAPPER.readTree(replyJson);
+            
             return reply;
 
         } catch (Exception e) {
-            throw new LoanMessagingFailureException("Loan JMS request/reply failed" + e.getStackTrace());
+            throw new LoanMessagingFailureException("Loan JMS request/reply failed", e);
         }
     }
 }
