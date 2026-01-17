@@ -32,7 +32,7 @@ public class UserCreatedProducer {
             ctx.createProducer().send(queue, json);
             System.out.println("📤 Sent USER_CREATED document: " + json);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to send USER_CREATED document message", e);
+            throw new RuntimeException("Failed to send USER_CREATED document message" + e.getStackTrace());
         }
     }
 }
