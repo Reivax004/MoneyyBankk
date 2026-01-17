@@ -8,8 +8,8 @@ import jakarta.validation.constraints.PastOrPresent;
 @Table(name = "connection_histories")
 public class ConnectionHistory {
 
-    @Id @GeneratedValue
-    private Integer id;    
+    @Id
+    private String id;
 
     @PastOrPresent
     private LocalDate connection_date;
@@ -26,12 +26,12 @@ public class ConnectionHistory {
         this.status = status;
     }
 
-    public Integer getId() { return this.id; }
+    public String getId() { return this.id; }
     public LocalDate getConnectionDate() { return this.connection_date; }
     public String getStatus() { return this.status; }
     public User getUser() { return this.user; }
     
-    public void setId(Integer id) { this.id = id; }
+    public void setId(String id) { this.id = id; }
     public void setConnectionDate(LocalDate connection_date) { this.connection_date = connection_date; }
     public void setStatus(String status) { this.status = status;}
     public void setUser(User user) { this.user = user; }

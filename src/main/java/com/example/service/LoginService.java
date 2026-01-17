@@ -21,15 +21,20 @@ public class LoginService {
     public LoginService() {
     }
 
-    public String login(String email, String password) {
+    public String login(String email, String password, String correlationId) {
         User user = userService.getUserByEmail(email);
+
         if (user == null) {
+            userService.saveConnectionHistory(null, "DENIED", correlationId);
             throw new NotFoundException("Email not found");
         }
 
         if (!BCrypt.checkpw(password, user.getPassword())) {
+            userService.saveConnectionHistory(user, "DENIED", correlationId);
             throw new NotAuthorizedException("Bad credentials");
         }
+
+        userService.saveConnectionHistory(user, "APPROVED", correlationId);
 
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);

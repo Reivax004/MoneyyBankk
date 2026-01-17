@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.config.Persistence;
+import com.example.models.ConnectionHistory;
 import com.example.models.Transaction;
 import com.example.models.User;
 
@@ -14,6 +15,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -92,8 +94,9 @@ public class UserService {
 
         cq.select(root)
                 .where(cb.equal(root.get("email"), email));
+        List<User> results = em.createQuery(cq).getResultList();
 
-        return em.createQuery(cq).getSingleResult();
+        return results.isEmpty() ? null : results.get(0);
     }
     public boolean existsByEmail(String email) {
         Long count = em.createQuery(
@@ -102,6 +105,17 @@ public class UserService {
                 .getSingleResult();
         return count > 0;
     }
-
+    public void saveConnectionHistory(User user, String status, String correlationId) {
+        ConnectionHistory history = new ConnectionHistory();
+        history.setUser(user);
+        history.setConnectionDate(LocalDate.now());
+        history.setStatus(status);
+        history.setId(correlationId);
+        var tx = em.getTransaction();
+        tx.begin();
+        em.persist(history);
+        tx.commit();
+        em.close();
+    }
 
 }
