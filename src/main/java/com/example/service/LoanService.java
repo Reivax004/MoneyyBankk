@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.messaging.LoanRequestProducer;
 import com.example.models.User;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.Map;
 
@@ -16,13 +17,16 @@ public class LoanService {
 
     private final LoanRequestProducer loanProducer = new LoanRequestProducer();
 
-    public Map<String, Object> requestLoan(int userId, double amount) {
-        User user = userService.findUser(userId);
-        if (user == null) {
-            throw new jakarta.ws.rs.NotFoundException("User not found");
+    public Map<String, Object> requestLoan(String email, double amount) {
+        if (email == null || email.isBlank()) {
+            throw new NotFoundException("User email missing");
         }
 
-        // stats calculées côté producer (comme tu l’as dit)
+        User user = userService.getUserByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+
         Map<String, Object> stats = statisticsService.getAccountStatistics(user);
 
         // JMS Request/Reply

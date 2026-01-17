@@ -1,7 +1,6 @@
 package com.example.filters;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
@@ -16,6 +15,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
 import javax.crypto.SecretKey;
 
 @Provider
@@ -24,16 +24,16 @@ public class JwtFilter implements ContainerRequestFilter {
 
     private static final String SECRET = "key-code-moneey-bankk-2025-very-secure-key!!";
     private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
-    
+
     @Override
     public void filter(ContainerRequestContext ctx) throws IOException {
 
-        String path = ctx.getUriInfo().getPath();
+        String path = ctx.getUriInfo().getPath(); // ex: "auth/login"
         if (path.startsWith("auth/login") || path.startsWith("users/register")) {
-            return; // Skip authentication for login endpoint
+            return;
         }
-        String authHeader = ctx.getHeaderString("Authorization");
 
+        String authHeader = ctx.getHeaderString("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             ctx.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             return;
@@ -50,6 +50,8 @@ public class JwtFilter implements ContainerRequestFilter {
             Claims body = jwt.getPayload();
             String email = body.getSubject();
 
+            final SecurityContext previous = ctx.getSecurityContext();
+
             ctx.setSecurityContext(new SecurityContext() {
                 @Override
                 public Principal getUserPrincipal() {
@@ -63,7 +65,7 @@ public class JwtFilter implements ContainerRequestFilter {
 
                 @Override
                 public boolean isSecure() {
-                    return ctx.getSecurityContext().isSecure();
+                    return previous != null && previous.isSecure();
                 }
 
                 @Override

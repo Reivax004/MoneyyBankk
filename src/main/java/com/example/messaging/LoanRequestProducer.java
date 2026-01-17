@@ -19,7 +19,6 @@ public class LoanRequestProducer {
         try (JMSContext ctx = factory.createContext()) {
             Queue requestQueue = ctx.createQueue("LoanRequestQueue");
 
-            // Reply-to temporaire (pas besoin de créer une queue côté Artemis)
             TemporaryQueue replyQueue = ctx.createTemporaryQueue();
             JMSConsumer replyConsumer = ctx.createConsumer(replyQueue);
 
@@ -38,12 +37,12 @@ public class LoanRequestProducer {
 
             String json = MAPPER.writeValueAsString(doc);
 
-            JMSProducer producer = ctx.createProducer();
-            producer.setJMSReplyTo(replyQueue);
-            producer.setJMSCorrelationID(requestId);
-            producer.send(requestQueue, json);
+            TextMessage msg = ctx.createTextMessage(json);
+            msg.setJMSReplyTo(replyQueue);
+            msg.setJMSCorrelationID(requestId);
 
-            // attend la réponse du conseiller (timeout)
+            ctx.createProducer().send(requestQueue, msg);
+
             String replyJson = replyConsumer.receiveBody(String.class, 5000);
             if (replyJson == null) {
                 return Map.of(
