@@ -19,13 +19,19 @@ public class ConnectionHistoriesResource {
     public Response list() {
         List<ConnectionHistory> connectionHistoryList =
                 connectionHistoriesService.findAllConnectionHistories();
+        if (connectionHistoryList.isEmpty()) {
+            throw new NotFoundException("No users found");
+        }
         return Response.ok(connectionHistoryList).build();
-
     }
+
     @GET
     @Path("/{id}")
     public Response get(@PathParam("id") int id) {
         List<ConnectionHistory> connectionHistoryList = connectionHistoriesService.findAllConnectionHistoriesOfUser(id);
+        if (connectionHistoryList.isEmpty()) {
+            throw new NotFoundException("User %d not found".formatted(id));
+        }
         return Response.ok(connectionHistoryList).build();
     }
 }
