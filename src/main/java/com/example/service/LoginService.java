@@ -12,6 +12,7 @@ import java.util.Date;
 
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.WebApplicationException;
 
 public class LoginService {
 
@@ -31,7 +32,7 @@ public class LoginService {
 
         if (!BCrypt.checkpw(password, user.getPassword())) {
             userService.saveConnectionHistory(user, "DENIED", correlationId);
-            throw new NotAuthorizedException("Bad credentials");
+            throw new WebApplicationException("Bad credentials");
         }
 
         userService.saveConnectionHistory(user, "APPROVED", correlationId);
