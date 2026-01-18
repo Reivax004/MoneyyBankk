@@ -1,6 +1,8 @@
 package com.example.resources;
 
 import com.example.service.LoanService;
+import com.example.responses.SuccessResponse;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
@@ -34,8 +36,8 @@ public class LoanResource {
 
         String email = securityContext.getUserPrincipal().getName();
 
-        return Response.ok(
-                loanService.requestLoan(email, body.amount)
-        ).build();
+        Object loanResult = loanService.requestLoan(email, body.amount);
+
+        return SuccessResponse.of("Loan requested successfully", loanResult);
     }
 }
