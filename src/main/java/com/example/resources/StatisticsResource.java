@@ -3,6 +3,7 @@ package com.example.resources;
 import com.example.models.User;
 import com.example.service.StatisticsService;
 import com.example.service.UserService;
+import com.example.responses.SuccessResponse;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -30,9 +31,8 @@ public class StatisticsResource {
             throw new NotAuthorizedException("User not authenticated");
         }
 
-        Map<String, Object> stats =
-                statisticService.getAccountStatistics(user);
+        Map<String, Object> stats = statisticService.getAccountStatistics(user);
 
-        return Response.ok(stats).build();
+        return SuccessResponse.of("Account statistics fetched successfully", stats);
     }
 }

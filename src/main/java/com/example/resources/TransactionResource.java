@@ -4,6 +4,7 @@ import com.example.models.Transaction;
 import com.example.models.User;
 import com.example.service.TransactionService;
 import com.example.service.UserService;
+import com.example.responses.SuccessResponse;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -31,13 +32,18 @@ public class TransactionResource {
         if (user == null) {
             throw new NotAuthorizedException("User not authenticated");
         }
+
         List<Transaction> transactionList =
                 transactionService.findAllTransactionOfUser(user.getId());
-        if (transactionList.isEmpty()) {
-            return Response.ok(transactionList).build();
-        }
-        return Response.ok(transactionList).build();
+
+        return SuccessResponse.of(
+                transactionList.isEmpty()
+                        ? "No transactions found"
+                        : "Transactions fetched successfully",
+                transactionList
+        );
     }
+
     @GET
     @Path("/{id}")
     public Response get(@PathParam("id") int id) {
@@ -45,7 +51,7 @@ public class TransactionResource {
         if (t == null) {
             throw new NotFoundException("Transaction %d not found".formatted(id));
         }
-        return Response.ok(t).build();
+        return SuccessResponse.of("Transaction fetched successfully", t);
     }
 
     @PUT
@@ -55,7 +61,7 @@ public class TransactionResource {
         if (t == null) {
             throw new NotFoundException("Transaction %d not found".formatted(id));
         }
-        return Response.ok(t).build();
+        return SuccessResponse.of("Transaction updated successfully", t);
     }
 
     @DELETE
@@ -65,7 +71,7 @@ public class TransactionResource {
         if (removed == null) {
             throw new NotFoundException("Transaction %d not found".formatted(id));
         }
-        return Response.noContent().build();
+        return SuccessResponse.of("Transaction deleted successfully", removed);
     }
 
     @POST
@@ -79,8 +85,10 @@ public class TransactionResource {
         if (user == null) {
             throw new NotAuthorizedException("User not authenticated");
         }
+
         transaction.setUser(user);
         Transaction created = transactionService.createTransaction(transaction);
-        return Response.status(Response.Status.CREATED).entity(created).build();
+
+        return SuccessResponse.of("Transaction created successfully", created);
     }
 }

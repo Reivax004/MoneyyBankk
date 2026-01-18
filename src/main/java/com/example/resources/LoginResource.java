@@ -2,12 +2,15 @@ package com.example.resources;
 
 import com.example.models.User;
 import com.example.service.LoginService;
+import com.example.responses.SuccessResponse;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.UUID;
+import java.util.Map;
 
 @Path("/auth")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -33,8 +36,7 @@ public class LoginResource {
 
         String token = loginService.login(user.getEmail(), user.getPassword(), correlationId);
 
-        return Response.ok(token)
-                .header("X-Correlation-Id", correlationId)
-                .build();
+        return SuccessResponse.of("Login successful", Map.of("token", token), "X-Correlation-Id", correlationId);
+
     }
 }

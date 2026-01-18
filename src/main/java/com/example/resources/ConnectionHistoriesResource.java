@@ -1,6 +1,9 @@
 package com.example.resources;
+
 import com.example.models.ConnectionHistory;
 import com.example.service.ConnectionHistoriesService;
+import com.example.responses.SuccessResponse;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
@@ -22,7 +25,7 @@ public class ConnectionHistoriesResource {
         if (connectionHistoryList.isEmpty()) {
             throw new NotFoundException("No users found");
         }
-        return Response.ok(connectionHistoryList).build();
+        return SuccessResponse.of("Connection histories fetched successfully", connectionHistoryList);
     }
 
     @GET
@@ -32,6 +35,6 @@ public class ConnectionHistoriesResource {
         if (connectionHistoryList.isEmpty()) {
             throw new NotFoundException("User %d not found".formatted(id));
         }
-        return Response.ok(connectionHistoryList).build();
+        return SuccessResponse.of("Connection histories of user fetched successfully", connectionHistoryList);
     }
 }
