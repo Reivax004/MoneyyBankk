@@ -4,6 +4,7 @@ import com.example.messaging.LoanRequestProducer;
 import com.example.models.User;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class LoanService {
 
     private final LoanRequestProducer loanProducer = new LoanRequestProducer();
 
-    public Map<String, Object> requestLoan(String email, double amount) {
+    public JsonNode requestLoan(String email, double amount) {
         if (email == null || email.isBlank()) {
             throw new NotFoundException("User email missing");
         }
