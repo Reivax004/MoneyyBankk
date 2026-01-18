@@ -51,7 +51,7 @@ public class LoanRequestProducer {
             }
 
             JsonNode reply = MAPPER.readTree(replyJson);
-            
+            System.out.println("Received loan decision: " + reply.get("reason") + ", amount: " + reply.get("amount"));
             return reply;
 
         } catch (Exception e) {
