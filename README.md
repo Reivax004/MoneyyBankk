@@ -144,6 +144,10 @@ body :
 
 Faire une demande de prêt sur son compte au consumer : POST loans/request + body + bearer token
 
+### Récupération des logs de connexion
+
+Récupérer tous les logs de connexion: GET /connection-histories/all
+
 ## Evolutions futures
 
 Système de role
