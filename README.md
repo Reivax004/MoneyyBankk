@@ -29,7 +29,7 @@ Pour lancer l'application en local plusieurs étapes sont à effectuer.
 ### Build du projet 
 
 ```bash
-mvn install
+mvn clean package
 ```
 
 ### Lancement des services (PostgreSQL + ActiveMQ Artemis)
