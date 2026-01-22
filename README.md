@@ -1,33 +1,64 @@
 # Bienvenue sur MoneyyBankk!
 
-Ce projet a été crée dans le cadre du module INF2, il permet un accès à un compte, la création ainsi que la mise à jour de ses transactions. De plus il permet d'obtenir différentes statistiques sur un compte
+Projet réalisé dans le cadre du module INF2.
+MoneyyBankk est une application bancaire simplifiée permettant :
+
+- la gestion des utilisateurs
+
+- la création et la consultation de transactions
+
+- le calcul de statistiques financières
+
+- la communication asynchrone Producer / Consumer via JMS (ActiveMQ Artemis)
+
+Un Consumer joue le rôle de conseiller bancaire pour traiter certains événements (création d’utilisateur, demande de prêt, etc.).
 
 ## Prérequis
 
 Afin de fonctionner ce projet à besoin de :
 
--JDK 21
--Maven
--Docker
+- JDK 21
+- Maven
+- Docker
 
-Créer les adresses et les queues dans artemis sur http://localhost:8161 admin/admin
 
 ## Comment accéder au projet ?
 
 Pour lancer l'application en local plusieurs étapes sont à effectuer.
 
+### Build du projet 
+
 ```bash
 mvn install
+```
+
+### Lancement des services (PostgreSQL + ActiveMQ Artemis)
+
+```bash
 docker compose up -d
 ```
-Puis lancer le main, on recoit alors normalement : 
 
+### Lancement du Producer (API principale)
+
+Lancer la classe Main du projet principal.
+
+Message attendu
+
+```bash
 "Api server is starting on http://localhost:8080/api/"
+```
 
+### Lancement du Consumer (API principale)
 
+Lancer la classe Main du projet Consumer.
 
+Message attendu
 
-## Remarques 
+```bash
+"Api server is starting on http://localhost:8081/api/"
+```
+
+## Base de données
 
 Nom de db : starterdb 
 User : admin mdp : admin
@@ -36,55 +67,86 @@ Driver : PSQL (AWS Wrapper)
 Au cas où Postman renvoit des erreurs 500, il faut créer la bdd starterdb ainsi que l'user admin/admin en cmd.
 
 
+## Route HTTP principales
 
+Base URL :
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Pour lancer le frontend Angular, ouvrir un deuxième terminal dans le répertoire "medicalrecord" du projet et exécuter la commande suivante:
 ```bash
-ng serve
-```
-Remarque: Si la commande ne marche pas, faite l'installation des packages avec la commande `npm install` puis refaire `ng serve`.
-
-### Une fois les trois commandes lancées, ouvrir le navigateur et tapper le lien suivant `http://localhost:4200`.
-
-## Comment ajouter les jeux de données par défaut ?
-
-### Version Mac et Linux: Dans le terminale du répertoire "backend", réaliser l'importations des données avec la commande suivante:
-```bash
-mongoimport --db MedicalRecord --collection establishments --jsonArray --file ./../dataset/establishments.json
-mongoimport --db MedicalRecord --collection practitioners --jsonArray --file ./../dataset/practitioners.json
-mongoimport --db MedicalRecord --collection patients --jsonArray --file ./../dataset/patients.json
-mongoimport --db MedicalRecord --collection follow_up_files --jsonArray --file ./../dataset/follow_up_files.json
-mongoimport --db MedicalRecord --collection medical_documents --jsonArray --file ./../dataset/medical_documents.json
-mongoimport --db MedicalRecord --collection appointments --jsonArray --file ./../dataset/appointments.json
+http://localhost:8080/api/
 ```
 
-### Version Windows: Ouvrir un nouveau terminal PowerShell (pas ceux des IDE) et exécuter la commande suivante dans le répertoire "backend" pour accéder à MongoSH:
-```bash
-mongosh mongodb://localhost:27017/MedicalRecord
-```
-### Ensuite, lancer les commandes suivantes:
-```bash
-db.establishments.insertMany(contenu du fichier establishments.json dans le dossier dataset)
-db.practitioners.insertMany(contenu du fichier practitioners.json dans le dossier dataset)
-db.patients.insertMany(contenu du fichier patients.json dans le dossier dataset)
-db.follow_up_files.insertMany(contenu du fichier follow_up_files.json dans le dossier dataset)
-db.medical_documents.insertMany(contenu du fichier medical_documents.json dans le dossier dataset)
-db.appointments.insertMany(contenu du fichier appointments.json dans le dossier dataset)
-```
+### Authentication
+
+body : 
+{
+"email": "",
+"password": ""
+}
+
+POST auth/login + body
+
+Cela nous renvoit notre bearer token
+
+### Utilisateurs
+
+body :
+  {
+    "lastname": "",
+    "firstname": "",
+    "birthdate": "",
+    "email": "",
+    "password": ""
+  }
+
+Création : POST users/register + body
+
+Modification : PUT users/id + body + bearer token
+
+Suppresion : DELETE users/id + bearer token
+
+Liste de tout les users : GET users/all + bearer token
+
+Liste d'un user : GET users/id + bearer token
+
+### Transactions
+
+body : 
+  {
+    "id": "",
+    "price": "",
+    "date": "",
+    "currency": "",
+    "type": "",
+    "user_id":""
+  }
+
+Recupérer toutes les transactions de son compte : GET /transactions/all + bearer token
+
+Recupérer une transaction de son compte : GET /transactions/id + bearer token
+
+Créer une transaction : POST /transactions/new + body + bearer token
+
+Modifier une transaction PUT /transactions/id + body + bearer token
+
+Supprimer une transaciton DELETE /transactions/id + bearer token
+
+
+### Statistiques 
+
+Récupérer les statistiques de son compte : GET /statistics/account
+
+### Demande de prêt
+
+body :
+  {
+    "amount": ""
+  }
+
+Faire une demande de prêt sur son compte au consumer : POST loans/request + body + bearer token
+
+## Evolutions futures
+
+Système de role
 
 ## Auteurs
 
