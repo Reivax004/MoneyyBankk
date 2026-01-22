@@ -128,7 +128,7 @@ Créer une transaction : POST /transactions/new + body + bearer token
 
 Modifier une transaction PUT /transactions/id + body + bearer token
 
-Supprimer une transaciton DELETE /transactions/id + bearer token
+Supprimer une transaction DELETE /transactions/id + bearer token
 
 
 ### Statistiques 
