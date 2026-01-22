@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.config.Persistence;
 import com.example.exceptions.EmailAlreadyUsedException;
+import com.example.messaging.UserCreatedProducer;
 import com.example.models.ConnectionHistory;
 import com.example.models.User;
 import jakarta.ejb.Stateless;
@@ -10,10 +11,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-
 import java.time.LocalDate;
 import java.util.List;
-
 import org.mindrot.jbcrypt.BCrypt;
 
 @Stateless
@@ -22,8 +21,11 @@ public class UserService {
     @PersistenceContext
     EntityManager em;
 
+    private UserCreatedProducer userCreatedProducer;
+
     public UserService() {
         this.em = Persistence.getEntityManager();
+        this.userCreatedProducer = new UserCreatedProducer();
     }
 
     public User createUser(User user) {
@@ -35,7 +37,7 @@ public class UserService {
         String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hash);
         em.persist(user);
-        new com.example.messaging.UserCreatedProducer().sendUserCreatedEvent(user);
+        this.userCreatedProducer.sendUserCreatedEvent(user);
         tx.commit();
         em.close();
         return user;
